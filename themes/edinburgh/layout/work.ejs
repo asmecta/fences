@@ -1,0 +1,79 @@
+<%
+    var category = page.categories.data[0];
+    var posts = site.categories.findOne({name: category.name}).posts;
+%>
+
+<div class="col-12 mb-2 px-4">
+    <div class="row">
+        <div class="col-md-10 col-8">
+            <div class="row category">
+                <% posts.data.forEach(post=>{ %>
+                    <div class="col-md-2 col-4">
+                        <a href="<%- url_for(post.path) %>">
+                            <span class="<%- post._id === page._id? 'active':'' %>"><%= post.title %></span>
+                        </a>   
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+        <div class="col-md-2 col-4 text-end category">
+            <a href="/categories/work"><span class="active"><%= category.name[0].toUpperCase() + category.name.slice(1) %></span></a>
+        </div>
+    </div>
+</div>
+<div class="col-12 mb-2 px-4">
+    <img class="<%= page.large==='width3'?'full-width-element':'img-fluid' %> project-img" src="<%- config.root %><%- page.cover_image || theme.default_cover_image %>"
+        alt="<%- page.title || theme.default_post_title || " Untitled" %>">
+</div>
+<style>
+    .grid{
+        box-sizing: border-box;
+    }
+    .grid img{
+        /* height: 100%; */
+        overflow: hidden;
+    }
+    .grid-item{
+        position: relative;
+        overflow: hidden;
+        padding: 10px 10px 10px 0;
+        box-sizing: border-box;
+    }
+</style>
+<div class="col-12 mb-4 px-4">
+    <div class="row grid">
+        <% page.images.forEach(item=>{ %>
+            <div class="col-md-4 col-12 grid-item">
+                <img class="img-fluid project-img" src="<%- config.root %><%- item %>" alt="<%- item %>">
+            </div>
+        <% }); %>
+    </div>
+</div>
+<div class="col-12 pt-lg-3 mb-4 portfolio-content">
+    <%- page.content %>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const grid = document.querySelector('.grid');
+        imagesLoaded(grid, function () {
+            let fixWith = function(){
+                let wd = grid.children[0].clientWidth / 3 * 2;
+                for(let i = 0; i < grid.children.length; i++){
+                    grid.children[i].style.height = wd + 'px';
+                }
+            }
+
+
+            window.addEventListener('resize', fixWith);
+            fixWith();
+
+            mediumZoom('.project-img', {
+                background: 'rgba(0, 0, 0, 0.9)',
+                margin: 24
+            });
+        });
+
+    });
+</script>

@@ -1,0 +1,139 @@
+<style>
+    .grid {
+        position: relative;
+    }
+
+    .grid-item {
+        display: block;
+        position: absolute;
+        /* transition: all 0.3s linear;
+        left: 0;
+        top: 0;
+        width: 33%; */
+    }
+
+    .grid-item img {
+        width: 100%;
+        height: auto;
+    }
+
+    @media (max-width: 765px) {
+        .grid-item {
+            position: static;
+            width: 100% !important;
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+<div class="col-12 px-4 pt-lg-3">
+    <div class="grid">
+        <% var portrait=site.categories.findOne({name:'portrait'}); var portrait_url='' ; if(portrait){ let
+            posts=portrait.posts; portrait_url=posts.data[posts.length-1].path; } %>
+            <a class="grid-item" href="<%- url_for(portrait_url) %>">
+                <div class="position-relative">
+                    <img class="card-img-top"
+                        src="<%- config.root %><%- 'images/cover-portrait.jpeg' || theme.default_cover_image %>" alt=""
+                        srcset="">
+                    <h6 class="card-title position-absolute top-50 start-50 text-white translate-middle text-nowrap">
+                        portrait</h6>
+                </div>
+            </a>
+            <% var landscape=site.categories.findOne({name:'landscape'}); var landscape_url='' ; if(landscape){ let
+                posts=landscape.posts; landscape_url=posts.data[posts.length-1].path; } %>
+                <a class="grid-item" href="<%- url_for(landscape_url) %>">
+                    <div class="position-relative">
+                        <img class="card-img-top"
+                            src="<%- config.root %><%- 'images/cover-landscape.jpeg' || theme.default_cover_image %>"
+                            alt="" srcset="">
+                        <h6
+                            class="card-title position-absolute top-50 start-50 text-white translate-middle text-nowrap">
+                            Landscape</h6>
+                    </div>
+                </a>
+                <% var videos=site.categories.findOne({name:'videos'}); var videos_url='' ; if(landscape){ let
+                    posts=videos.posts; videos_url=posts.data[posts.length-1].path; } %>
+                    <a class="grid-item" href="<%- url_for(videos_url) %>">
+                        <div class="position-relative">
+                            <img class="card-img-top"
+                                src="<%- config.root %><%- 'images/cover-videos.jpeg' || theme.default_cover_image %>"
+                                alt="" srcset="">
+                            <h6
+                                class="card-title position-absolute top-50 start-50 text-white translate-middle text-nowrap">
+                                Videos
+                            </h6>
+                        </div>
+                    </a>
+                    <% var documentation=site.categories.findOne({name:'documentation'}); var documentation_url='' ; if(documentation){ let
+                        posts=documentation.posts; documentation_url=posts.data[posts.length-1].path; } %>
+                        <a class="grid-item width2" href="<%- url_for(documentation_url) %>">
+                            <div class="position-relative">
+                                <img class="card-img-top"
+                                    src="<%- config.root %><%- 'images/cover-documentation.jpeg' || theme.default_cover_image %>"
+                                    alt="" srcset="">
+                                <h6
+                                    class="card-title position-absolute top-50 start-50 text-white translate-middle text-nowrap">
+                                    Documentation</h6>
+                            </div>
+                        </a>
+                        <% var special=site.categories.findOne({name:'special'}); var special_url='' ; if(landscape){ let
+                            posts=special.posts; special_url=posts.data[posts.length-1].path; } %>
+                            <a class="grid-item" href="<%- url_for(special_url) %>">
+                                <div class="position-relative">
+                                    <img class="card-img-top"
+                                        src="<%- config.root %><%- 'images/cover-special-topic.jpeg' || theme.default_cover_image %>"
+                                        alt="" srcset="">
+                                    <h6
+                                        class="card-title position-absolute top-50 start-50 text-white translate-middle text-nowrap">
+                                        Special
+                                        topic</h6>
+                                </div>
+                            </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const grid = document.querySelector('.grid');
+        let px = 0;
+        imagesLoaded(grid, function () {
+            let resizeTimeout;
+            let fixWith = function () {
+                cancelAnimationFrame(resizeTimeout);
+                resizeTimeout = requestAnimationFrame(() => {
+                    let npx = grid.children[0].clientWidth / 32.6;
+                    if (Math.abs(npx - px) < 0.01) return;
+                    px = npx;
+                    let y1 = 26.85 * px;
+                    grid.children[3].style.transform = `translateY(${y1}px)`;
+                    let y0 = grid.children[0].clientHeight + px / 2;
+                    grid.children[4].style.transform = `translateY(${y0}px)`;
+
+                    grid.style.height = `${grid.children[0].clientHeight + grid.children[4].clientHeight}px`;
+                });
+            }
+
+            grid.children[0].style.width = '32.6%';
+            grid.children[1].style.width = '39.65%';
+            grid.children[2].style.width = '26.35%';
+            grid.children[3].style.width = '66.5%';
+            grid.children[4].style.width = '32.6%';
+
+            grid.children[1].style.left = '33%';
+            grid.children[2].style.left = '73.15%';
+            grid.children[3].style.left = '33%';
+
+            let debounceFixWith = debounce(fixWith, 200); // 限制触发频率
+            window.addEventListener('resize', debounceFixWith);
+
+            function debounce(func, delay) {
+                let timeout;
+                return function (...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), delay);
+                };
+            }
+            fixWith();
+        });
+    });
+</script>

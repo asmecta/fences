@@ -1,0 +1,15 @@
+<nav class="navbar navbar-expand-sm navbar-light px-1 py-1 my-1 mb-sm-2">
+  <!-- <a class="navbar-brand ml-2" href="<%- config.root %>"><%-config.title || ""%></a> -->
+  <!-- <button class="navbar-toggler navbar-toggler-right py-2" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button> -->
+  <div class="navbar-collapse text-center" id="navbarCollapse">
+    <ul class="navbar-nav d-flex flex-row ml-auto my-auto">
+      <% for (var i in config.menu){ %>
+        <li class="nav-item px-1<%= page.path.startsWith(config.menu[i].slice(1)) ? ' active' : '' %><%= config.menu[i].includes(page.layout)?' active':'' %>">
+          <a class="nav-link" href="<%- url_for(config.menu[i]) %>"><%= i %></a>
+        </li>
+      <% } %>
+    </ul>
+  </div>
+</nav>

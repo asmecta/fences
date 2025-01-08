@@ -1,0 +1,71 @@
+<style>
+.grid {
+	display: block;
+	position: relative;
+	width: 100%;
+	padding: 0;
+}
+
+.grid-item {
+	width: 33%;
+	margin-bottom: calc(100vw * 0.005);
+}
+
+.gutter-sizer {
+	width: .5%;
+}
+
+.width3{
+	width: 100%;
+}
+.width2{
+	width: 66.5%;
+}
+
+.grid-item img {
+	width: 100%;
+	height: auto;
+}
+
+.grid-sizer {
+	width: 33%;
+}
+
+@media (max-width: 768px) {
+	.grid-sizer,
+	.grid-item {
+		width: 100%;
+	}
+}
+</style>
+
+<div class="col-12 px-4 pt-lg-3">
+    <div class="grid">
+        <% let posts=posts_by_category('buy') %>
+        <div class="grid-sizer"></div>
+        <div class="gutter-sizer"></div>
+            <% posts.each(function(item) { %>
+                <a class="grid-item <%- item.large %>" href="<%= url_for(item.path) %>">
+                    <div class="position-relative">
+                        <img class="card-img-top"
+                            src="<%- config.root %><%- item.cover_image || theme.default_cover_image %>" alt="" srcset="">
+                            <h6 class="card-title position-absolute top-50 start-50 text-white translate-middle text-nowrap"><%- item.title %></h6>
+                    </div>
+                </a>
+            <% }); %>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const grid = document.querySelector('.grid');
+    imagesLoaded(grid, function () {
+        let masonryInstance = new Masonry(grid, {
+        itemSelector: '.grid-item',
+        columnWidth: '.grid-sizer',
+        gutter: '.gutter-sizer',
+        percentPosition: true,
+      });
+    });
+});
+</script>
