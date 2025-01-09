@@ -1,6 +1,6 @@
 <%
     var category = page.categories.data[0];
-    var posts = site.categories.findOne({name: category.name}).posts;
+    var posts = site.categories.findOne({name: category.name}).posts.reverse();
 %>
 
 <div class="col-12 mb-2 px-4">
@@ -27,7 +27,7 @@
 </div>
 <style>
     .grid{
-        box-sizing: border-box;
+        margin-top: -10px;
     }
     .grid img{
         /* height: 100%; */
@@ -36,7 +36,7 @@
     .grid-item{
         position: relative;
         overflow: hidden;
-        padding: 10px 10px 10px 0;
+        padding: 20px 10px 0 10px;
         box-sizing: border-box;
     }
 </style>

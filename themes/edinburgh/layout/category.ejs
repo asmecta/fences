@@ -50,7 +50,7 @@
                             Landscape</h6>
                     </div>
                 </a>
-                <% var videos=site.categories.findOne({name:'videos'}); var videos_url='' ; if(landscape){ let
+                <% var videos=site.categories.findOne({name:'videos'}); var videos_url='' ; if(videos){ let
                     posts=videos.posts; videos_url=posts.data[posts.length-1].path; } %>
                     <a class="grid-item" href="<%- url_for(videos_url) %>">
                         <div class="position-relative">
@@ -75,7 +75,7 @@
                                     Documentation</h6>
                             </div>
                         </a>
-                        <% var special=site.categories.findOne({name:'special'}); var special_url='' ; if(landscape){ let
+                        <% var special=site.categories.findOne({name:'special'}); var special_url='' ; if(special){ let
                             posts=special.posts; special_url=posts.data[posts.length-1].path; } %>
                             <a class="grid-item" href="<%- url_for(special_url) %>">
                                 <div class="position-relative">
