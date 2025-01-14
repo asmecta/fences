@@ -1,6 +1,6 @@
 <%
     var category = page.categories.data[0];
-    var posts = site.categories.findOne({name: category.name}).posts.reverse();
+    var posts = site.categories.findOne({name: category.name}).posts;
 %>
 
 <div class="col-12 mb-2 px-4">
@@ -22,8 +22,19 @@
     </div>
 </div>
 <div class="col-12 mb-2 px-4">
-    <img class="<%= page.large==='width3'?'full-width-element':'img-fluid' %> project-img" src="<%- config.root %><%- page.cover_image || theme.default_cover_image %>"
-        alt="<%- page.title || theme.default_post_title || " Untitled" %>">
+    <div class="swiper" style="width: 100%;overflow: hidden;">
+        <div class="swiper-wrapper">
+            <% page.images.forEach(item=>{ %>
+                <div class="swiper-slide d-flex justify-content-center align-items-center">
+                    <img class="img-fluid swiper-image project-img" src="<%- config.root %><%- item %>" alt="<%- item %>">
+                </div>
+            <% }); %>
+        </div>
+        <div class="swiper-pagination"></div>
+      <!-- If we need navigation buttons -->
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
 </div>
 <style>
     .grid{
@@ -39,12 +50,18 @@
         padding: 20px 10px 0 10px;
         box-sizing: border-box;
     }
+    .medium-zoom-overlay{
+        z-index: 999;
+    }
+    .medium-zoom-image--opened{
+        z-index: 9999;
+    }
 </style>
 <div class="col-12 mb-4 px-4">
     <div class="row grid">
         <% page.images.forEach(item=>{ %>
             <div class="col-md-4 col-12 grid-item">
-                <img class="img-fluid project-img" src="<%- config.root %><%- item %>" alt="<%- item %>">
+                <img class="img-fluid project-img " src="<%- config.root %><%- item %>" alt="<%- item %>">
             </div>
         <% }); %>
     </div>
@@ -63,16 +80,50 @@
                 for(let i = 0; i < grid.children.length; i++){
                     grid.children[i].style.height = wd + 'px';
                 }
-            }
 
+                let sp= document.querySelector('.swiper');
+                sp.style.height = sp.clientWidth * 0.666 + 'px';
+            }
 
             window.addEventListener('resize', fixWith);
             fixWith();
+            let sps = document.querySelectorAll('.swiper-image');
 
-            mediumZoom('.project-img', {
+            sps.forEach(sp=>{
+                if(sp.clientHeight > sp.clientWidth){
+                    sp.style.height = '100%';
+                    sp.style.width = 'auto';
+                }else{
+                    sp.style.width = '100%';
+                    sp.style.height = 'auto';
+                }
+            });
+
+            const swiper = new Swiper('.swiper', {
+                slidesPerView: 1,
+                loop: true,
+                autoplay:true,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+            });
+
+            const zoom = mediumZoom('.project-img', {
                 background: 'rgba(0, 0, 0, 0.9)',
                 margin: 24
             });
+
+            zoom.on('open', ()=>{
+                swiper.autoplay.stop();
+            })
+            zoom.on('close', ()=>{
+                swiper.autoplay.start();
+            })
         });
 
     });
